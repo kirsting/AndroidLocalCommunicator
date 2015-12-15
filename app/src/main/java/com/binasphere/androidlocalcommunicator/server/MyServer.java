@@ -47,8 +47,10 @@ public class MyServer extends ServerSocket {
 
     public void stop() {
         isRunning = false;
-        if (tServer.isAlive()) {
-            tServer.stop();
+        try {
+            close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -63,13 +65,15 @@ public class MyServer extends ServerSocket {
                     try {
                         socket = accept();
                         Log.d("Server", "accept");
-                        handler.sendMessage(Message.obtain());
                         InputStream is = socket.getInputStream();
                         byte[] buf = new byte[1024];
                         int len = 0;
                         if ((len = is.read(buf)) != -1) {
                             String temp = new String(buf, 0, len);
                             Log.d("Client to Server", temp);
+                            Message message=Message.obtain();
+                            message.obj=temp;
+                            handler.sendMessage(message);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

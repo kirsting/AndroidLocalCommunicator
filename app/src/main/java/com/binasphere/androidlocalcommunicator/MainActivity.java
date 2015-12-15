@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             Activity activity=mActivity.get();
-            Toast.makeText(activity,"on Message Received",Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity,msg.obj.toString(),Toast.LENGTH_SHORT).show();
         }
     }
     @Override
@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.server_start)
     public void onServerClick(View v) {
         try {
-            if (mServer == null) {
+
                 mServer = new MyServer(8888,handler);
                 mServer.start();
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 MyClient client = new MyClient();
-                client.sent("test");
+                client.sent("client msg");
                 Log.d("Client", "sent");
                 try {
                     client.close();
@@ -106,5 +106,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mServer.stop();
     }
 }

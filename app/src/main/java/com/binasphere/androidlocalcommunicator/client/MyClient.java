@@ -15,6 +15,7 @@ public class MyClient extends Socket {
         try {
             connect(new InetSocketAddress("127.0.0.1", 8888));
             int localPort = getLocalPort();
+            msg=msg+" port ="+localPort;
             Log.d("Client", "port "+ localPort);
             OutputStream os = getOutputStream();
             os.write(msg.getBytes());
